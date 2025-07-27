@@ -6,8 +6,8 @@ terraform {
    } 
   }
   backend "s3" {
-    bucket = "sam-bucket-84s"
-    key = "vpc-test-demo"
+    bucket = "84s-remote-sam-dev"
+    key = "roboshop-dev-vpc"
     region = "us-east-1"
     encrypt = true
     use_lockfile = true
