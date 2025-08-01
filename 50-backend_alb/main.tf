@@ -3,6 +3,7 @@ module "backend_alb" {
   source = "terraform-aws-modules/alb/aws"
 
   
+  enable_deletion_protection = false
   version = "9.16.0"
   internal = true
   name    = "${var.project}-${var.environment}-backend-alb"
@@ -20,9 +21,6 @@ module "backend_alb" {
   )
 }
 
-resource "aws_lb" "front_end" {
-  # ...
-}
 
 resource "aws_lb_listener" "backend_alb" {
   load_balancer_arn = module.backend_alb.arn
