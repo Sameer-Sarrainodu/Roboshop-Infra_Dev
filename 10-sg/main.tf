@@ -1,3 +1,43 @@
+module "mongodb" {
+    # source = "../../terraform-aws-sg"
+    source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
+    project = var.project
+    environment = var.environment
+    sg_description = "sg for mongodb"
+    sg_name="mongodb"
+    vpc_id=local.vpc_id
+  
+}
+module "redis" {
+    # source = "../../terraform-aws-sg"
+    source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
+    project = var.project
+    environment = var.environment
+    sg_description = "sg for redis"
+    sg_name="redis"
+    vpc_id=local.vpc_id
+  
+}
+module "mysql" {
+    # source = "../../terraform-aws-sg"
+    source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
+    project = var.project
+    environment = var.environment
+    sg_description = "sg for mysql"
+    sg_name="mysql"
+    vpc_id=local.vpc_id
+  
+}
+module "rabbitmq" {
+    # source = "../../terraform-aws-sg"
+    source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
+    project = var.project
+    environment = var.environment
+    sg_description = "sg for rabbitmq"
+    sg_name="rabbitmq"
+    vpc_id=local.vpc_id
+  
+}
 module "frontend" {
     # source = "../../terraform-aws-sg"
     source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
@@ -20,14 +60,6 @@ module "bastion" {
   
 }
 
-resource "aws_security_group_rule" "bastion_laptop" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.bastion.sg_id
-}
 
 
 module "backend_alb" {
@@ -40,15 +72,6 @@ module "backend_alb" {
     vpc_id=local.vpc_id
   
 }
-# backend ALB accepting connections from my bastion host on port no 80
-resource "aws_security_group_rule" "backend_alb_bastion" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  source_security_group_id = module.bastion.sg_id
-  security_group_id = module.backend_alb.sg_id
-} 
 module "vpn" {
     # source = "../../terraform-aws-sg"
     source = "git::https://github.com/Sameer-Sarrainodu/Terraform-Aws-Sg.git?ref=main"
@@ -59,6 +82,60 @@ module "vpn" {
     vpc_id=local.vpc_id
   
 }
+
+resource "aws_security_group_rule" "mongodb" {
+  count = length(var.mongodb_ports)
+  type = "ingress"
+  from_port = var.mongodb_ports[count.index]
+  to_port = var.mongodb_ports[count.index]
+  protocol = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.mongodb.sg_id
+  
+}
+
+resource "aws_security_group_rule" "redis" {
+  count = length(var.redis_ports)
+  type = "ingress"
+  from_port = var.redis_ports[count.index]
+  to_port = var.redis_ports[count.index]
+  protocol = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.redis.sg_id
+  
+}
+
+resource "aws_security_group_rule" "mysql" {
+  count = length(var.mysql_ports)
+  type = "ingress"
+  from_port = var.mysql_ports[count.index]
+  to_port = var.mysql_ports[count.index]
+  protocol = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.mysql.sg_id
+  
+}
+
+resource "aws_security_group_rule" "rabbitmq" {
+  count = length(var.rabbitmq_ports)
+  type = "ingress"
+  from_port = var.rabbitmq_ports[count.index]
+  to_port = var.rabbitmq_ports[count.index]
+  protocol = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.rabbitmq.sg_id
+  
+}
+
+resource "aws_security_group_rule" "bastion_laptop" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.bastion.sg_id
+}
+
 resource "aws_security_group_rule" "vpn_ssh" {
   type              = "ingress"
   from_port         = 22
@@ -93,6 +170,9 @@ resource "aws_security_group_rule" "vpn_943" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.vpn.sg_id
 } 
+
+# backend-alb
+
 resource "aws_security_group_rule" "backend_alb_vpn" {
   type              = "ingress"
   from_port         = 80
@@ -101,3 +181,11 @@ resource "aws_security_group_rule" "backend_alb_vpn" {
   source_security_group_id = module.vpn.sg_id
   security_group_id = module.backend_alb.sg_id
 }
+resource "aws_security_group_rule" "backend_alb_bastion" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  source_security_group_id = module.bastion.sg_id
+  security_group_id = module.backend_alb.sg_id
+} 
