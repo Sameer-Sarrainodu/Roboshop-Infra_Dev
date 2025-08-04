@@ -1,14 +1,14 @@
-resource "aws_key_pair" "daws-84s" {
-  key_name   = "daws-84s"
-  public_key =  file("C:\\devops\\daws-84s.pub") 
+# resource "aws_key_pair" "daws-84s" {
+#   key_name   = "daws-84s"
+#   public_key =  file("C:\\devops\\daws-84s.pub") 
 
-}
+# }
 resource "aws_instance" "web" {
   ami           = local.ami_id
   instance_type = "t3.micro"
   vpc_security_group_ids = [local.vpn_sg_id]
   subnet_id = local.public_subnet_id
-  key_name = aws_key_pair.daws-84s.key_name
+  key_name = "daws-84s"
   user_data = file("openvpn.sh")
 
   tags =merge(
