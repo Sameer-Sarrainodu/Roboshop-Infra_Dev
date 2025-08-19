@@ -14,7 +14,7 @@ resource "aws_lb_target_group" "catalogue" {
 
   }
 }
-resource "aws_instance" "mysql" {
+resource "aws_instance" "catalogue" {
   ami = local.ami_id
   instance_type = "t3.micro"
   vpc_security_group_ids = [local.catalogue_sg_id]
@@ -23,8 +23,39 @@ resource "aws_instance" "mysql" {
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.project}-${var.environment}-mysql"
+      Name = "${var.project}-${var.environment}-catalogue"
     }
     
   )
+}
+
+resource "terraform_data" "catalogue" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers_replace = [
+    aws_instance.catalogue.id
+  ]
+
+# Copies the file as the Administrator user using WinRM
+  provisioner "file" {
+  source      = "catalogue.sh"
+  destination = "/tmp/catalogue.sh"
+  }
+
+
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.catalogue.private_ip
+  }
+
+
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/catalogue.sh",
+      "sudo sh /tmp/catalogue.sh catalogue"
+
+    ]
+  }
 }
