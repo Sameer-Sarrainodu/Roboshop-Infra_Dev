@@ -28,9 +28,7 @@ resource "aws_instance" "catalogue" {
     }
     
   )
-  lifecycle {
-    create_before_destroy = true
-  }
+ 
 }
 
 resource "terraform_data" "catalogue" {
@@ -74,9 +72,7 @@ resource "aws_ami_from_instance" "catalogue" {
       Name = "${var.project}-${var.environment}-catalogue"
     }
   )
-  lifecycle {
-    create_before_destroy = true
-  }
+ 
 }
 
 resource "terraform_data" "catalogue_delete" {
@@ -110,9 +106,7 @@ resource "aws_launch_template" "catalogue" {
       }
     )
   }
- lifecycle {
-    create_before_destroy = true
-  }
+ 
 
   # volume tags created by ASG
   tag_specifications {
