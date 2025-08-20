@@ -92,13 +92,19 @@ resource "aws_ami_from_instance" "catalogue" {
     }
   )
 }
+resource "null_resource" "catalogue_terminate" {
+  triggers = {
+    instance_id = aws_instance.catalogue.id
+  }
 
-# Explicitly terminate instance after AMI creation
-resource "aws_ec2_instance_state" "catalogue_terminate" {
-  instance_id = aws_instance.catalogue.id
-  state       = "terminated"
-  depends_on  = [aws_ami_from_instance.catalogue]
+  provisioner "local-exec" {
+    command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id}"
+  }
+
+  depends_on = [aws_ami_from_instance.catalogue]
 }
+
+
 
 resource "aws_launch_template" "catalogue" {
   name                                   = "${var.project}-${var.environment}-catalogue"
