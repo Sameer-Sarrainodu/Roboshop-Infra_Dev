@@ -21,7 +21,7 @@ resource "aws_instance" "catalogue" {
   instance_type          = "t3.micro"
   vpc_security_group_ids = [local.catalogue_sg_id]
   subnet_id              = local.private_subnet_id
-  iam_instance_profile   = "TerraformAdmin"
+  # iam_instance_profile   = "TerraformAdmin"
 
   # Replace remote-exec + file with user_data
   # user_data = <<-EOF
