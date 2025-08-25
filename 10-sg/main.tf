@@ -359,8 +359,8 @@ resource "aws_security_group_rule" "bastion_backend_alb" {
 }
 resource "aws_security_group_rule" "bastion_frontend" {
   type              = "ingress"
-  from_port         = 80
-  to_port           = 80
+  from_port         = 22
+  to_port           = 22
   protocol          = "tcp"
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.frontend.sg_id
