@@ -169,7 +169,7 @@ resource "aws_security_group_rule" "https_vpn" {
   security_group_id = module.vpn.sg_id
 }
 
-resource "aws_security_group_rule" "1194_vpn" {
+resource "aws_security_group_rule" "vpn_1194" {
   type              = "ingress"
   from_port         = 1194
   to_port           = 1194
@@ -178,7 +178,7 @@ resource "aws_security_group_rule" "1194_vpn" {
   security_group_id = module.vpn.sg_id
 }
 
-resource "aws_security_group_rule" "943_vpn" {
+resource "aws_security_group_rule" "vpn_943" {
   type              = "ingress"
   from_port         = 943
   to_port           = 943
