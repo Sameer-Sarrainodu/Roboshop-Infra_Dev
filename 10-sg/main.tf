@@ -583,7 +583,7 @@ resource "aws_security_group_rule" "http_frontend_alb" {
   to_port           = 80
   protocol          = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
-  security_group_id = module.frontend_alb.sg_id
+  security_group_id = module.backend_alb.sg_id
 }
 
 resource "aws_security_group_rule" "https_frontend_alb" {
