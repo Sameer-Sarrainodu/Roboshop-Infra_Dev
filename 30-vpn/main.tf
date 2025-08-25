@@ -5,7 +5,7 @@
 # }
 resource "aws_instance" "vpn" {
   ami           = local.ami_id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   vpc_security_group_ids = [local.vpn_sg_id]
   subnet_id = local.public_subnet_id
   key_name = "daws-84s"

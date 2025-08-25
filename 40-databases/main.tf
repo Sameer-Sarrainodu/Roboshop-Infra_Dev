@@ -1,6 +1,6 @@
 resource "aws_instance" "mongodb" {
   ami           = local.ami_id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   vpc_security_group_ids = [local.mongodb_sg_id]
   subnet_id = local.database_subnet_id
 
@@ -39,7 +39,7 @@ resource "terraform_data" "mongodb" {
 
 resource "aws_instance" "redis" {
   ami           = local.ami_id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   vpc_security_group_ids = [local.redis_sg_id]
   subnet_id = local.database_subnet_id
 
@@ -78,7 +78,7 @@ resource "terraform_data" "redis" {
 
 resource "aws_instance" "mysql" {
   ami           = local.ami_id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   vpc_security_group_ids = [local.mysql_sg_id]
   subnet_id = local.database_subnet_id
   iam_instance_profile = "ec2roleforssmparameters"
@@ -117,7 +117,7 @@ resource "terraform_data" "mysql" {
 
 resource "aws_instance" "rabbitmq" {
   ami           = local.ami_id
-  instance_type = "t3.micro"
+  instance_type = "t2.micro"
   vpc_security_group_ids = [local.rabbitmq_sg_id]
   subnet_id = local.database_subnet_id
 
