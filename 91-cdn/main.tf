@@ -58,7 +58,7 @@ resource "aws_cloudfront_distribution" "roboshop" {
 
 resource "aws_route53_record" "frontend_alb" {
   zone_id = var.zone_id
-  name    = "cdn.${var.zone_name}" #dev.sharkdev.shop
+  name    = "cdn.${var.zone_name}" #dev.daws84s.site
   type    = "A"
 
   alias {

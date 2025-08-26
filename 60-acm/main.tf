@@ -1,6 +1,9 @@
 resource "aws_acm_certificate" "sharkdev" {
   domain_name       = "dev.${var.zone_name}"
   validation_method = "DNS"
+  subject_alternative_names = [
+    "cdn.${var.zone_name}"                       # additional domain
+  ]
 
   tags = merge(
     local.common_tags,
