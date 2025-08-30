@@ -577,14 +577,14 @@ resource "aws_security_group_rule" "frontend_alb_frontend" {
   security_group_id = module.frontend.sg_id
 }
 
-resource "aws_security_group_rule" "http_frontend_alb" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-  security_group_id = module.backend_alb.sg_id
-}
+# resource "aws_security_group_rule" "http_frontend_alb" {
+#   type              = "ingress"
+#   from_port         = 80
+#   to_port           = 80
+#   protocol          = "tcp"
+#   cidr_blocks = ["0.0.0.0/0"]
+#   security_group_id = module.backend_alb.sg_id
+# }
 
 resource "aws_security_group_rule" "https_frontend_alb" {
   type              = "ingress"
